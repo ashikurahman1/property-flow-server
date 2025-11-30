@@ -1,14 +1,22 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
-import serverless from 'serverless-http';
+import mongoose from 'mongoose';
 import cors from 'cors';
 
-const app = express();
+mongoose.connect(process.env.MONGO_URI);
 
+const app = express();
+const port = process.env.PORT || 3000;
+
+// middleware
 app.use(cors());
 app.use(express.json());
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'API working!' });
+app.get('/', (req, res) => {
+  res.send('Smart server is running');
 });
 
-export const handler = serverless(app);
+app.listen(port, () => {
+  console.log(`Smart server is running on port: ${port}`);
+});
